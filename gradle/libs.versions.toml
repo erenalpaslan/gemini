@@ -1,0 +1,59 @@
+[versions]
+agp = "8.2.0"
+kotlin = "1.9.20"
+compose = "1.5.4"
+compose-compiler = "1.5.4"
+compose-material3 = "1.1.2"
+androidx-activityCompose = "1.8.2"
+ktor = "2.3.7"
+coroutines = "1.7.3"
+kermit = "2.0.2"
+kotlinx-serialization-json = "1.6.0"
+settings = "1.1.0"
+android-security-crypto = "1.1.0-alpha06"
+koin = "3.5.3"
+voyager = "1.0.0-rc07"
+appyx-navigation = "2.0.0-alpha08"
+kamel-image = "0.7.3"
+material-motion = "0.12.3"
+
+[libraries]
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
+compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
+kotlinx-coroutines = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref="coroutines"}
+ktor-client-core = {module = "io.ktor:ktor-client-core", version.ref = "ktor"}
+ktor-client-content-negotiation = {module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor"}
+ktor-client-serialization = {module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor"}
+ktor-client-logging = {module = "io.ktor:ktor-client-logging", version.ref = "ktor"}
+ktor-client-okhttp = {module = "io.ktor:ktor-client-android", version.ref = "ktor"}
+ktor-client-darwin = {module = "io.ktor:ktor-client-darwin", version.ref = "ktor"}
+koin-core = {group = "io.insert-koin", name = "koin-core", version.ref="koin"}
+koin-android = {group = "io.insert-koin", name = "koin-android", version.ref="koin"}
+kermit = {module = "co.touchlab:kermit", version.ref = "kermit"}
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+multiplatform-settings = {module = "com.russhwolf:multiplatform-settings", version.ref="settings"}
+multiplatform-settings-serialization = { module = "com.russhwolf:multiplatform-settings-serialization", version.ref = "settings" }
+security-crypto-ktx = { group = "androidx.security", name = "security-crypto-ktx", version.ref = "android-security-crypto" }
+spotlight = { module = "com.bumble.appyx:spotlight", version.ref = "appyx-navigation" }
+spotlight-android = { module = "com.bumble.appyx:spotlight-android", version.ref = "appyx-navigation" }
+voyager-bottomSheetNavigator = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
+voyager-androidx = { module = "cafe.adriel.voyager:voyager-androidx", version.ref = "voyager" }
+appyx-interactions = { module = "com.bumble.appyx:appyx-interactions", version.ref = "appyx-navigation" }
+appyx-navigation = { module = "com.bumble.appyx:appyx-navigation", version.ref = "appyx-navigation" }
+backstack = { module = "com.bumble.appyx:backstack", version.ref = "appyx-navigation" }
+backstack-android = { module = "com.bumble.appyx:backstack-android", version.ref = "appyx-navigation" }
+kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel-image" }
+compose-materialmotion = {group = "io.github.fornewid", name = "material-motion-compose-core", version.ref="material-motion"}
+
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }

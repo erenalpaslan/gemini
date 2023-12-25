@@ -1,0 +1,13 @@
+package com.erendev.gemini
+
+import com.erendev.gemini.di.appModule
+import org.koin.core.context.startKoin
+
+/**
+ * Created by erenalpaslan on 30.09.2023
+ */
+fun initKoin(){
+    startKoin {
+        modules(appModule)
+    }
+}
