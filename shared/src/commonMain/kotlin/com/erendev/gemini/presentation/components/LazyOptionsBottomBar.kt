@@ -13,7 +13,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.erendev.gemini.presentation.components.IconWithLabel
 import com.erendev.gemini.presentation.features.main.components.BottomOptions
 import com.erendev.gemini.presentation.features.main.components.MainBottomOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi

@@ -20,8 +20,9 @@ import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.ParentNode
 import com.bumble.appyx.navigation.node.node
 import com.bumble.appyx.utils.customisations.NodeCustomisationDirectoryImpl
-import com.erendev.gemini.presentation.features.getstarted.GetStartedScreen
+import com.erendev.gemini.presentation.features.onboarding.OnboardingScreen
 import com.erendev.gemini.presentation.features.splash.SplashScreen
+import com.erendev.gemini.presentation.features.welcome.WelcomeScreen
 import com.erendev.gemini.presentation.theme.GeminiTheme
 
 /**
@@ -86,7 +87,8 @@ internal class RootNode(
 
     override fun resolve(interactionTarget: NavTarget, buildContext: BuildContext) = when(interactionTarget) {
         NavTarget.Splash -> node(buildContext) { SplashScreen().Content() }
-        NavTarget.OnBoarding -> node(buildContext) { GetStartedScreen().Content() }
+        NavTarget.OnBoarding -> node(buildContext) { OnboardingScreen().Content() }
+        NavTarget.Welcome -> node(buildContext) { WelcomeScreen().Content() }
         NavTarget.Main -> node(buildContext) {  }
         NavTarget.Chat -> node(buildContext) {  }
         NavTarget.Recent -> node(buildContext) {  }
