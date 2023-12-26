@@ -1,13 +1,13 @@
 package com.erendev.gemini.presentation.features.splash
 
 import com.erendev.gemini.common.BaseViewModel
+import com.erendev.gemini.utils.settings.SettingKeys
+import com.erendev.gemini.utils.settings.settings
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import com.erendev.gemini.utils.settings.SettingKeys
-import com.erendev.gemini.utils.settings.settings
 
 /**
  * Created by erenalpaslan on 30.09.2023
