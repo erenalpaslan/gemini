@@ -16,6 +16,7 @@ class WelcomeScreen : BaseScreen<WelcomeViewModel>() {
         val backStack = LocalBackStack.current
 
         WelcomeContent {
+            viewModel.onContinueClicked()
             backStack.replace(NavTarget.Main)
         }
     }

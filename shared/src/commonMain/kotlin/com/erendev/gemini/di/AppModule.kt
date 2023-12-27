@@ -1,5 +1,6 @@
 package com.erendev.gemini.di
 
+import com.erendev.gemini.presentation.features.home.homeModule
 import com.erendev.gemini.presentation.features.onboarding.onboardingModule
 import com.erendev.gemini.presentation.features.splash.splashModule
 import com.erendev.gemini.presentation.features.welcome.welcomeModule
@@ -13,6 +14,7 @@ val appModule = module {
     includes(
         splashModule,
         onboardingModule,
-        welcomeModule
+        welcomeModule,
+        homeModule
     )
 }
