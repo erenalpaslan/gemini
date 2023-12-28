@@ -31,4 +31,9 @@ object Strings {
         const val TITLE_THIRD = "Built with responsibility and safety at the core"
         const val DESC_THIRD = "Building upon Google’s AI Principles and the robust safety policies across google's products, new protections to account for Gemini’s multimodal capabilities"
     }
+
+    object Chat {
+        const val Message = "Message"
+        const val Search = "Search"
+    }
 }

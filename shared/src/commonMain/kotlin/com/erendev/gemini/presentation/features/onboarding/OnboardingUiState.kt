@@ -9,7 +9,6 @@ import com.erendev.gemini.presentation.theme.green
 import com.erendev.gemini.presentation.theme.green_light
 import com.erendev.gemini.presentation.theme.ink_darker
 import com.erendev.gemini.presentation.theme.red
-import com.erendev.gemini.presentation.theme.red_darkest
 import com.erendev.gemini.presentation.theme.red_lighter
 import com.erendev.gemini.presentation.theme.red_lightest
 import com.erendev.gemini.presentation.theme.sky

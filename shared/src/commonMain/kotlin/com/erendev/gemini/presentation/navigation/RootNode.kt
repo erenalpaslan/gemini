@@ -20,6 +20,7 @@ import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.ParentNode
 import com.bumble.appyx.navigation.node.node
 import com.bumble.appyx.utils.customisations.NodeCustomisationDirectoryImpl
+import com.erendev.gemini.presentation.features.home.HomeScreen
 import com.erendev.gemini.presentation.features.onboarding.OnboardingScreen
 import com.erendev.gemini.presentation.features.splash.SplashScreen
 import com.erendev.gemini.presentation.features.welcome.WelcomeScreen
@@ -89,7 +90,7 @@ internal class RootNode(
         NavTarget.Splash -> node(buildContext) { SplashScreen().Content() }
         NavTarget.OnBoarding -> node(buildContext) { OnboardingScreen().Content() }
         NavTarget.Welcome -> node(buildContext) { WelcomeScreen().Content() }
-        NavTarget.Main -> node(buildContext) {  }
+        NavTarget.Main -> node(buildContext) { HomeScreen.Content() }
         NavTarget.Chat -> node(buildContext) {  }
         NavTarget.Recent -> node(buildContext) {  }
     }

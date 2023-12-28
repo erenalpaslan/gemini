@@ -24,7 +24,7 @@ fun WelcomeItem(
 ) {
     Row(modifier = Modifier.fillMaxWidth()) {
         Icon(painterResource(icon), null)
-        Spacer(Modifier.width(4.dp))
+        Spacer(Modifier.width(8.dp))
         Column {
             Text(title, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(4.dp))
