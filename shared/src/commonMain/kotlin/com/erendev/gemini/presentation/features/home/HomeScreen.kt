@@ -14,13 +14,17 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import com.bumble.appyx.components.backstack.operation.push
 import com.erendev.gemini.common.BaseScreen
 import com.erendev.gemini.common.resources.Icons
 import com.erendev.gemini.common.resources.Strings
 import com.erendev.gemini.presentation.components.GeminiDrawerSheet
 import com.erendev.gemini.presentation.components.GeminiTopBar
 import com.erendev.gemini.presentation.components.chat.ChatMessageTextField
+import com.erendev.gemini.presentation.components.chat.ChatMessages
 import com.erendev.gemini.presentation.components.menu.ChatMoreMenu
+import com.erendev.gemini.presentation.navigation.LocalBackStack
+import com.erendev.gemini.presentation.navigation.NavTarget
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -33,14 +37,21 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
     @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
     @Composable
     override fun Screen() {
+        val backStack = LocalBackStack.current
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val coroutineScope = rememberCoroutineScope()
 
         DismissibleNavigationDrawer(
             drawerContent = {
                 GeminiDrawerSheet(
-                    onNewChatClicked = {},
-                    onRecentClicked = {}
+                    onNewChatClicked = {
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                    },
+                    onSearch = { searchText ->
+                        //TODO: Search on recents
+                    }
                 )
             },
             drawerState = drawerState,
@@ -52,7 +63,7 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
                             actions = {
                                 ChatMoreMenu(
                                     onViewDetailClicked = {
-
+                                        backStack.push(NavTarget.ViewDetail)
                                     },
                                     onRenameClicked = {
 
@@ -79,7 +90,7 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
                     }
                 ) {
                     Column(modifier = Modifier.padding(it)) {
-                        Box(modifier = Modifier.fillMaxSize().weight(1f))
+                        ChatMessages(listOf("asdasd", "asdasds", "asdasdasd"), modifier = Modifier.weight(1f))
                         ChatMessageTextField { chatText ->
                             viewModel.onSend(chatText)
                         }

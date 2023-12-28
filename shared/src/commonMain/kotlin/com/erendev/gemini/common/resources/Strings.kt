@@ -9,6 +9,9 @@ object Strings {
 
     object Button {
         const val Continue = "Continue"
+        const val Delete = "Delete"
+        const val Rename = "Rename"
+        const val ViewDetails = "View Details"
     }
 
     object Onboarding {
