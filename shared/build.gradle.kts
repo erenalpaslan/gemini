@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     id("org.jetbrains.compose")
+    id("app.cash.sqldelight") version "2.0.1"
+
 }
 
 kotlin {
@@ -21,6 +23,7 @@ kotlin {
         it.binaries.framework {
             baseName = "shared"
             isStatic = true
+            linkerOpts.add("-lsqlite3")
         }
     }
 
@@ -63,6 +66,12 @@ kotlin {
             implementation(libs.voyager.bottomSheetNavigator)
             implementation(libs.compose.materialmotion)
             implementation(libs.kamel.image)
+
+            //SQLDelight
+            with(libs.sqldelight) {
+                implementation(coroutine.ext)
+                implementation(primitive.adapters)
+            }
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -75,10 +84,21 @@ kotlin {
             api(libs.appyx.navigation)
             api(libs.backstack.android)
             api(libs.spotlight.android)
+            implementation(libs.sqldelight.android.driver)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.sqldelight.native.driver)
+            implementation(libs.stately.common)
         }
+    }
+
+    targets.filterIsInstance<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>().forEach{
+        it.binaries.filterIsInstance<org.jetbrains.kotlin.gradle.plugin.mpp.Framework>()
+            .forEach { lib ->
+                lib.isStatic = false
+                lib.linkerOpts.add("-lsqlite3")
+            }
     }
 }
 
@@ -100,4 +120,13 @@ android {
     kotlin {
         jvmToolchain(17)
     }
+}
+
+sqldelight {
+    databases {
+        create("AppDb") {
+            packageName.set("com.erendev.gemini")
+        }
+    }
+    linkSqlite.set(true)
 }

@@ -12,10 +12,12 @@ kotlinx-serialization-json = "1.6.0"
 settings = "1.1.0"
 android-security-crypto = "1.1.0-alpha06"
 koin = "3.5.3"
+statelyCommon = "2.0.6"
 voyager = "1.0.0-rc07"
 appyx-navigation = "2.0.0-alpha08"
 kamel-image = "0.7.3"
 material-motion = "0.12.3"
+sqldelight = "2.0.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -41,6 +43,7 @@ multiplatform-settings-serialization = { module = "com.russhwolf:multiplatform-s
 security-crypto-ktx = { group = "androidx.security", name = "security-crypto-ktx", version.ref = "android-security-crypto" }
 spotlight = { module = "com.bumble.appyx:spotlight", version.ref = "appyx-navigation" }
 spotlight-android = { module = "com.bumble.appyx:spotlight-android", version.ref = "appyx-navigation" }
+stately-common = { module = "co.touchlab:stately-common", version.ref = "statelyCommon" }
 voyager-bottomSheetNavigator = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
 voyager-androidx = { module = "cafe.adriel.voyager:voyager-androidx", version.ref = "voyager" }
 appyx-interactions = { module = "com.bumble.appyx:appyx-interactions", version.ref = "appyx-navigation" }
@@ -49,6 +52,10 @@ backstack = { module = "com.bumble.appyx:backstack", version.ref = "appyx-naviga
 backstack-android = { module = "com.bumble.appyx:backstack-android", version.ref = "appyx-navigation" }
 kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel-image" }
 compose-materialmotion = {group = "io.github.fornewid", name = "material-motion-compose-core", version.ref="material-motion"}
+sqldelight-coroutine-ext = {module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight"}
+sqldelight-primitive-adapters = {module = "app.cash.sqldelight:primitive-adapters", version.ref = "sqldelight"}
+sqldelight-android-driver = {module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight"}
+sqldelight-native-driver = {module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight"}
 
 
 [plugins]

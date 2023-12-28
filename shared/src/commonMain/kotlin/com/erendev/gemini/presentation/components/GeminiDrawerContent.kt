@@ -23,7 +23,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun GeminiDrawerSheet(
     onNewChatClicked: () -> Unit,
-    onRecentClicked: (String?) -> Unit
+    onSearch: (String?) -> Unit
 ) {
     DismissibleDrawerSheet {
         val searchText = remember {
@@ -33,7 +33,7 @@ fun GeminiDrawerSheet(
         GeminiBasicTextField(
             text = searchText,
             onValueChanged = {
-
+                onSearch(it)
             },
             modifier = Modifier.padding(horizontal = 8.dp),
             placeholder = Strings.Chat.Search,

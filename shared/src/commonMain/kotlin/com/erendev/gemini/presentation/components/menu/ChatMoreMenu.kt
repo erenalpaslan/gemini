@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.erendev.gemini.common.resources.Icons
+import com.erendev.gemini.common.resources.Strings
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -36,9 +37,11 @@ fun ChatMoreMenu(
         onDismissRequest = { expanded = false }
     ) {
         DropdownMenuItem(
-            onClick = {},
+            onClick = {
+                      onViewDetailClicked()
+            },
             text = {
-                Text("View Details")
+                Text(Strings.Button.ViewDetails)
             },
             leadingIcon = {
                 Icon(painterResource(Icons.InfoCircle), null)
@@ -46,18 +49,22 @@ fun ChatMoreMenu(
         )
         Divider()
         DropdownMenuItem(
-            onClick = {},
+            onClick = {
+                      onRenameClicked()
+            },
             text = {
-                Text("Rename")
+                Text(Strings.Button.Rename)
             },
             leadingIcon = {
                 Icon(painterResource(Icons.Edit), null)
             }
         )
         DropdownMenuItem(
-            onClick = {},
+            onClick = {
+                      onDeleteClicked()
+            },
             text = {
-                Text("Delete")
+                Text(Strings.Button.Delete)
             },
             leadingIcon = {
                 Icon(painterResource(Icons.Trash), null)

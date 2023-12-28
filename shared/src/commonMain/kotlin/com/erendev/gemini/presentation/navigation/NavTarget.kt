@@ -5,6 +5,5 @@ enum class NavTarget {
     OnBoarding,
     Welcome,
     Main,
-    Chat,
-    Recent
+    ViewDetail
 }
