@@ -13,3 +13,17 @@ CREATE TABLE IF NOT EXISTS Message(
     timestamp TEXT NOT NULL,
     FOREIGN KEY (chatId) REFERENCES Chat(chatId)
 );
+
+getRecentPages:
+SELECT *
+FROM Chat
+LIMIT :limit OFFSET :offset;
+
+getMessages:
+SELECT *
+FROM Message
+WHERE chatId = :chatId;
+
+insertMessage:
+INSERT INTO Message
+VALUES ?;
