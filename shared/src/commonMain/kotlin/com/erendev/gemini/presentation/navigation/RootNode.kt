@@ -37,7 +37,7 @@ val LocalBackStack = compositionLocalOf {
             initialTarget = NavTarget.Splash,
             savedStateMap = mapOf()
         ),
-        motionController = { BackStackFader(it) }
+        visualisation = { BackStackFader(it) }
     )
 }
 
@@ -56,7 +56,7 @@ internal class RootNode(
             initialTarget = NavTarget.Splash,
             savedStateMap = buildContext.savedStateMap
         ),
-        motionController = { BackStackFader(it) }
+        visualisation = { BackStackFader(it) }
     )
 ): ParentNode<NavTarget>(
     buildContext = buildContext,

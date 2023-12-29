@@ -19,7 +19,7 @@ abstract class BaseViewModel(): ScreenModel {
     val error: StateFlow<String?> = _error.asStateFlow()
 
     private val _showProgress: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val showProgress: StateFlow<Boolean> = _showProgress.asStateFlow()
+    val showProgressIndicator: StateFlow<Boolean> = _showProgress.asStateFlow()
 
     override fun onDispose() {
         onDestroy()

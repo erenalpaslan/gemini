@@ -1,5 +1,6 @@
 package com.erendev.gemini.data.database.dao
 
+import app.cash.sqldelight.async.coroutines.awaitAsList
 import com.bumble.appyx.interactions.UUID
 import com.erendev.gemini.AppDb
 import com.erendev.gemini.utils.dispatchers.AppCoroutineDispatchers
@@ -19,7 +20,7 @@ class ChatDao(
         offset: Long = 0
     ): List<Chat> {
         return withContext(dispatchers.io) {
-            query.getRecentPages(limit, offset).executeAsList()
+            query.getRecentPages(limit, offset).awaitAsList()
         }
     }
 
@@ -27,7 +28,7 @@ class ChatDao(
         chatId: String
     ): List<Message> {
         return withContext(dispatchers.io) {
-            query.getMessages(chatId).executeAsList()
+            query.getMessages(chatId).awaitAsList()
         }
     }
 

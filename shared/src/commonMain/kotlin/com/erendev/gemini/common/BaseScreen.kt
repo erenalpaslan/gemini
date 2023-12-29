@@ -45,7 +45,7 @@ abstract class BaseScreen<VM: BaseViewModel>: Screen, KoinComponent {
             )
         }
 
-        val showProgress by viewModel.showProgress.collectAsState()
+        val showProgress by viewModel.showProgressIndicator.collectAsState()
 
         Screen()
 
