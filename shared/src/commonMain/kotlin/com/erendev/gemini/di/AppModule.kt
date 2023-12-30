@@ -1,6 +1,11 @@
 package com.erendev.gemini.di
 
 import com.erendev.gemini.data.database.databaseModule
+import com.erendev.gemini.data.network.networkModule
+import com.erendev.gemini.data.repository.ChatRepositoryImpl
+import com.erendev.gemini.domain.repository.ChatRepository
+import com.erendev.gemini.domain.repository.repositoryModule
+import com.erendev.gemini.domain.usecase.useCaseModule
 import com.erendev.gemini.presentation.features.home.homeModule
 import com.erendev.gemini.presentation.features.onboarding.onboardingModule
 import com.erendev.gemini.presentation.features.splash.splashModule
@@ -15,6 +20,9 @@ val appModule = module {
 
     includes(
         databaseModule,
+        networkModule,
+        repositoryModule,
+        useCaseModule,
         splashModule,
         onboardingModule,
         welcomeModule,

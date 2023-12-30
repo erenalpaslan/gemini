@@ -19,7 +19,7 @@ abstract class BaseViewModel(): ScreenModel {
     val error: StateFlow<String?> = _error.asStateFlow()
 
     private val _showProgress: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val showProgress: StateFlow<Boolean> = _showProgress.asStateFlow()
+    val showProgressIndicator: StateFlow<Boolean> = _showProgress.asStateFlow()
 
     override fun onDispose() {
         onDestroy()
@@ -33,12 +33,8 @@ abstract class BaseViewModel(): ScreenModel {
         _error.value = null
     }
 
-    fun showProgress() {
-        _showProgress.value = true
-    }
-
-    fun hideProgress() {
-        _showProgress.value = false
+    fun showProgress(isLoading: Boolean) {
+        _showProgress.value = isLoading
     }
 
     fun showError(message: String?) {

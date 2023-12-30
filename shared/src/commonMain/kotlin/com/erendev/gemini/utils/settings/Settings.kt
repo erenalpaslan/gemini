@@ -7,4 +7,5 @@ expect val settings: SharedSettingsHelper
 
 object SettingKeys {
     const val IS_FIRST_ENTER = "IS_FIRST_ENTER"
+    const val LAST_CHAT = "LAST_CHAT"
 }

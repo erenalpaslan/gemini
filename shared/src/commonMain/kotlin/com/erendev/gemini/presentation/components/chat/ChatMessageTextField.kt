@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,7 +64,7 @@ fun ChatMessageTextField(
                       onSend(chatText.value)
             },
             colors = IconButtonDefaults.filledIconButtonColors(
-                containerColor = sky_light
+                containerColor = MaterialTheme.colorScheme.onPrimaryContainer
             )
         ) {
             Icon(

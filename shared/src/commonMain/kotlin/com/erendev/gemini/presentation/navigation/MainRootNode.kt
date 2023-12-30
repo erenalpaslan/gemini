@@ -15,6 +15,7 @@ import com.bumble.appyx.components.spotlight.operation.activate
 import com.bumble.appyx.components.spotlight.operation.first
 import com.bumble.appyx.components.spotlight.operation.last
 import com.bumble.appyx.components.spotlight.ui.fader.SpotlightFader
+import com.bumble.appyx.interactions.core.ui.Visualisation
 import com.bumble.appyx.navigation.composable.AppyxComponent
 import com.bumble.appyx.navigation.modality.BuildContext
 import com.bumble.appyx.navigation.node.Node
@@ -34,7 +35,9 @@ val LocalTabNavigator = compositionLocalOf {
             initialActiveIndex = 0f,
             savedStateMap = mapOf()
         ),
-        motionController = { SpotlightFader(it) },
+        visualisation = {
+            SpotlightFader(it)
+        }
     )
 }
 
@@ -46,7 +49,7 @@ internal class MainRootNode(
             initialActiveIndex = 0f,
             savedStateMap = buildContext.savedStateMap
         ),
-        motionController = { SpotlightFader(it) },
+        visualisation = { SpotlightFader(it) },
     )
 ): ParentNode<MainBottomOptions>(
     buildContext = buildContext,

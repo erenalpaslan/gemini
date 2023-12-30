@@ -15,11 +15,13 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.components.backstack.operation.replace
 import com.erendev.gemini.common.BaseScreen
 import com.erendev.gemini.common.resources.Icons
+import com.erendev.gemini.presentation.features.home.HomeViewModel
 import com.erendev.gemini.presentation.navigation.LocalBackStack
 import com.erendev.gemini.presentation.navigation.NavTarget
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.component.get
+import org.koin.core.component.inject
 
 /**
  * Created by erenalpaslan on 30.09.2023
@@ -27,7 +29,7 @@ import org.koin.core.component.get
 
 class SplashScreen() : BaseScreen<SplashViewModel>() {
 
-    override val viewModel: SplashViewModel = get()
+    override fun getViewModel(): Lazy<SplashViewModel> = inject()
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
