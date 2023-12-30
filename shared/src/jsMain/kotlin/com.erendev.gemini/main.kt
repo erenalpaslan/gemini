@@ -26,59 +26,70 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.CanvasBasedWindow
 import com.bumble.appyx.navigation.integration.MainIntegrationPoint
+import com.bumble.appyx.navigation.integration.NodeFactory
 import com.bumble.appyx.navigation.integration.ScreenSize
 import com.bumble.appyx.navigation.integration.WebNodeHost
+import com.erendev.gemini.presentation.features.home.HomeScreen
 import com.erendev.gemini.presentation.navigation.RootNode
+import com.erendev.gemini.presentation.theme.GeminiTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import org.jetbrains.skiko.wasm.onWasmReady
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     val events: Channel<Unit> = Channel()
-
-    CanvasBasedWindow(
-        title = "Gemini",
-        canvasElementId = "ComposeTarget"
-    ) {
-        val requester = remember { FocusRequester() }
-        var hasFocus by remember { mutableStateOf(false) }
-        var screenSize by remember { mutableStateOf(ScreenSize(0.dp, 0.dp)) }
-        val eventScope = remember { CoroutineScope(SupervisorJob() + Dispatchers.Main) }
-
-        Surface(
-            color = MaterialTheme.colorScheme.background,
-            modifier = Modifier
-                .fillMaxSize()
-                .onSizeChanged { screenSize = ScreenSize(it.width.dp, it.height.dp) }
-                .onKeyEvent {
-                    // See back handling section in the docs below!
-                    onKeyEvent(it, events, eventScope)
-                    return@onKeyEvent true
-                }
-                .focusRequester(requester)
-                .focusable()
-                .onFocusChanged { hasFocus = it.hasFocus }
+    onWasmReady {
+        CanvasBasedWindow(
+            title = "Gemini",
+            canvasElementId = "ComposeTarget"
         ) {
-            Text("asdasdasdasd")
-            WebNodeHost(
-                screenSize = screenSize,
-                onBackPressedEvents = events.receiveAsFlow()
-            ) {
-                RootNode(it)
+            var isInitialized by remember {
+                mutableStateOf(false)
             }
-        }
-
-        if (!hasFocus) {
             LaunchedEffect(Unit) {
-                requester.requestFocus()
+                initKoin()
+                isInitialized = true
             }
-        }
+            val requester = remember { FocusRequester() }
+            var hasFocus by remember { mutableStateOf(false) }
+            var screenSize by remember { mutableStateOf(ScreenSize(0.dp, 0.dp)) }
+            val eventScope = remember { CoroutineScope(SupervisorJob() + Dispatchers.Main) }
 
+            GeminiTheme {
+                Surface(
+                    color = MaterialTheme.colorScheme.background,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .onSizeChanged { screenSize = ScreenSize(it.width.dp, it.height.dp) }
+                        .onKeyEvent {
+                            // See back handling section in the docs below!
+                            onKeyEvent(it, events, eventScope)
+                            return@onKeyEvent true
+                        }
+                        .focusRequester(requester)
+                        .focusable()
+                        .onFocusChanged { hasFocus = it.hasFocus }
+                ) {
+                    if (isInitialized) {
+                        HomeScreen.Content()
+                    }
+                }
+
+                if (!hasFocus) {
+                    LaunchedEffect(Unit) {
+                        requester.requestFocus()
+                    }
+                }
+            }
+
+        }
     }
 }
 

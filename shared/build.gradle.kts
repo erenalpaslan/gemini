@@ -7,7 +7,8 @@ plugins {
 }
 
 kotlin {
-    js(IR) {
+    js {
+        moduleName = "gemini"
         browser()
         binaries.executable()
     }
@@ -102,7 +103,6 @@ kotlin {
             implementation(npm("dateformat", "3.0.3"))
             implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.0.0"))
             implementation(npm("sql.js", "1.8.0"))
-            implementation("com.bumble.appyx:appyx-navigation-js:2.0.0-alpha09")
         }
     }
 
