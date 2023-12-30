@@ -5,6 +5,7 @@ import com.erendev.gemini.data.entity.ChatModel
 import com.erendev.gemini.domain.GeminiResult
 import com.erendev.gemini.domain.usecase.DeleteChatUseCase
 import com.erendev.gemini.domain.usecase.GetMessagesUseCase
+import com.erendev.gemini.domain.usecase.GetRecentUseCase
 import com.erendev.gemini.domain.usecase.SendMessageUseCase
 import com.erendev.gemini.utils.date.DateUtils
 import com.erendev.gemini.utils.randomUUID
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val sendMessageUseCase: SendMessageUseCase,
     private val getMessagesUseCase: GetMessagesUseCase,
-    private val deleteChatUseCase: DeleteChatUseCase
+    private val deleteChatUseCase: DeleteChatUseCase,
+    private val getRecentUseCase: GetRecentUseCase
 ) : BaseViewModel() {
 
     private lateinit var chat: ChatModel
@@ -87,6 +89,34 @@ class HomeViewModel(
                     is GeminiResult.Error -> {}
                 }
             }
+        }
+    }
+
+    fun newChatClicked() {
+        viewModelScope.launch {
+            chat = createNewChat()
+            settings.store(SettingKeys.LAST_CHAT, chat)
+            _uiState.update { it.copy(messages = emptyList()) }
+        }
+    }
+
+    fun getRecent() {
+        viewModelScope.launch {
+            getRecentUseCase(0).collect { result ->
+                when(result) {
+                    is GeminiResult.Loading -> showProgress(result.isLoading)
+                    is GeminiResult.Success -> _uiState.update { it.copy(recent = result.data) }
+                    is GeminiResult.Error -> {}
+                }
+            }
+        }
+    }
+
+    fun onChatClicked(chat: ChatModel) {
+        viewModelScope.launch {
+            this@HomeViewModel.chat = chat
+            settings.store(SettingKeys.LAST_CHAT, chat)
+            getMessages()
         }
     }
 }

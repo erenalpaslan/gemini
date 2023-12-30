@@ -89,4 +89,13 @@ class ChatRepositoryImpl(
         }
     }
 
+    override suspend fun getRecent(page: Int): DataResult<List<ChatModel>> {
+        return try {
+            val recent = chatDao.getRecentChats(offset = (page * 10).toLong())
+            DataResult.Success(recent.map { it.toChatModel() })
+        }catch (e: Exception) {
+            DataResult.Error(e.message)
+        }
+    }
+
 }

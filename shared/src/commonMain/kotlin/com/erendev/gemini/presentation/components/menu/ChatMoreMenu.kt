@@ -27,6 +27,10 @@ fun ChatMoreMenu(
         mutableStateOf(false)
     }
 
+    fun collapse() {
+        expanded = false
+    }
+
     IconButton(onClick = {
         expanded = true
     }) {
@@ -38,7 +42,8 @@ fun ChatMoreMenu(
     ) {
         DropdownMenuItem(
             onClick = {
-                      onViewDetailClicked()
+                collapse()
+                onViewDetailClicked()
             },
             text = {
                 Text(Strings.Button.ViewDetails)
@@ -50,7 +55,8 @@ fun ChatMoreMenu(
         Divider()
         DropdownMenuItem(
             onClick = {
-                      onRenameClicked()
+                collapse()
+                onRenameClicked()
             },
             text = {
                 Text(Strings.Button.Rename)
@@ -61,7 +67,8 @@ fun ChatMoreMenu(
         )
         DropdownMenuItem(
             onClick = {
-                      onDeleteClicked()
+                collapse()
+                onDeleteClicked()
             },
             text = {
                 Text(Strings.Button.Delete)

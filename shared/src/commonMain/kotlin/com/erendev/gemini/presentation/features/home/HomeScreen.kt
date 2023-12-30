@@ -10,6 +10,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -40,20 +41,26 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
     @Composable
     override fun Screen() {
         val backStack = LocalBackStack.current
-        val drawerState = rememberDrawerState(DrawerValue.Closed)
-        val coroutineScope = rememberCoroutineScope()
         val uiState by viewModel.uiState.collectAsState()
+        val coroutineScope = rememberCoroutineScope()
+        val drawerState = rememberDrawerState(DrawerValue.Closed)
 
         DismissibleNavigationDrawer(
             drawerContent = {
                 GeminiDrawerSheet(
+                    recent = uiState.recent,
+                    drawerState = drawerState,
                     onNewChatClicked = {
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
+                        viewModel.newChatClicked()
                     },
-                    onSearch = { searchText ->
+                    onChatClicked = { chatModel ->
+                        viewModel.onChatClicked(chatModel)
+                    },
+                    onSearch = { _ ->
                         //TODO: Search on recents
+                    },
+                    onDrawerOpen = {
+                        viewModel.getRecent()
                     }
                 )
             },
