@@ -19,17 +19,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.bumble.appyx.components.backstack.operation.replace
 import com.erendev.gemini.common.BaseScreen
+import com.erendev.gemini.presentation.features.home.HomeViewModel
 import com.erendev.gemini.presentation.navigation.LocalBackStack
 import com.erendev.gemini.presentation.navigation.NavTarget
 import com.erendev.gemini.presentation.theme.sky_light
 import org.koin.core.component.get
+import org.koin.core.component.inject
 
 /**
  * Created by erenalpaslan on 30.09.2023
  */
 class OnboardingScreen : BaseScreen<OnboardingViewModel>() {
 
-    override val viewModel: OnboardingViewModel = get()
+    override fun getViewModel(): Lazy<OnboardingViewModel> = inject()
 
     @Composable
     override fun Screen() {

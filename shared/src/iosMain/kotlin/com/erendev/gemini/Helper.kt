@@ -1,5 +1,6 @@
 package com.erendev.gemini
 
+import com.erendev.gemini.data.network.initializeInterceptor
 import com.erendev.gemini.di.appModule
 import org.koin.core.context.startKoin
 
@@ -10,4 +11,5 @@ fun initKoin(){
     startKoin {
         modules(appModule)
     }
+    initializeInterceptor()
 }

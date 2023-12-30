@@ -17,13 +17,19 @@ import org.koin.core.component.KoinComponent
 /**
  * Created by erenalpaslan on 30.09.2023
  */
-abstract class BaseScreen<VM: BaseViewModel>: Screen, KoinComponent {
+abstract class BaseScreen<VM: BaseViewModel> : KoinComponent {
 
-    protected abstract val viewModel: VM
+    protected lateinit var viewModel: VM
+
+    abstract fun getViewModel(): Lazy<VM>
+
+    init {
+        viewModel = getViewModel().value
+    }
 
     @Composable
-    override fun Content() {
-        val error by viewModel.error.collectAsState()
+    fun Content() {
+        val error by viewModel.error.collectAsState(null)
 
         if (!error.isNullOrEmpty()) {
             AlertDialog(
@@ -58,5 +64,4 @@ abstract class BaseScreen<VM: BaseViewModel>: Screen, KoinComponent {
 
     @Composable
     abstract fun Screen()
-
 }

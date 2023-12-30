@@ -1,9 +1,12 @@
 package com.erendev.gemini.data.database.dao
 
 import app.cash.sqldelight.async.coroutines.awaitAsList
+import app.cash.sqldelight.async.coroutines.awaitAsOne
 import com.bumble.appyx.interactions.UUID
 import com.erendev.gemini.AppDb
+import com.erendev.gemini.data.entity.ChatModel
 import com.erendev.gemini.utils.dispatchers.AppCoroutineDispatchers
+import com.erendev.gemini.utils.randomUUID
 import comerendevgemini.Chat
 import comerendevgemini.Message
 import kotlinx.coroutines.withContext
@@ -33,15 +36,45 @@ class ChatDao(
     }
 
     suspend fun sendMessage(
-        chat: Chat,
-        content: String,
-        isAiResponse: Boolean
-    ): Message? {
+        message: Message
+    ) {
         withContext(dispatchers.io) {
             query.transaction {
-
+                query.insertMessage(message)
             }
         }
-       return null
+    }
+
+    suspend fun createChat(
+        chat: Chat
+    ) {
+        withContext(dispatchers.io) {
+            query.transaction {
+                query.insertChat(chat)
+            }
+        }
+    }
+
+    suspend fun getChat(
+        chatId: String
+    ): Chat? {
+        return withContext(dispatchers.io) {
+            try {
+                query.getChatById(chatId).awaitAsOne()
+            }catch (e: NullPointerException) {
+                null
+            }catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    suspend fun deleteChat(
+        chatModel: ChatModel
+    ) {
+        withContext(dispatchers.io) {
+            query.deleteMessagesByChatId(chatModel.chatId)
+            query.deleteChatById(chatModel.chatId)
+        }
     }
 }

@@ -1,9 +1,13 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsCompose)
     id("app.cash.sqldelight") version "2.0.1"
-
+    kotlin("plugin.serialization")
+    id("com.codingfeline.buildkonfig")
 }
 
 kotlin {
@@ -77,6 +81,9 @@ kotlin {
                 implementation(coroutine.ext)
                 implementation(primitive.adapters)
             }
+
+            //Date
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -90,6 +97,7 @@ kotlin {
             api(libs.backstack.android)
             api(libs.spotlight.android)
             implementation(libs.sqldelight.android.driver)
+            implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -103,6 +111,7 @@ kotlin {
             implementation(npm("dateformat", "3.0.3"))
             implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.0.0"))
             implementation(npm("sql.js", "1.8.0"))
+            implementation(npm("uuid", "9.0.1"))
         }
     }
 
@@ -147,4 +156,15 @@ sqldelight {
 
 compose.experimental {
     web.application {}
+}
+
+buildkonfig {
+    packageName = "com.erendev.gemini"
+    // objectName = "YourAwesomeConfig"
+    // exposeObjectWithName = "YourAwesomePublicConfig"
+
+    defaultConfigs {
+        buildConfigField(STRING, "BASE_URL", "https://generativelanguage.googleapis.com/")
+        buildConfigField(STRING, "API_KEY", gradleLocalProperties(rootDir).getProperty("API_KEY"))
+    }
 }

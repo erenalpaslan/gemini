@@ -33,12 +33,8 @@ abstract class BaseViewModel(): ScreenModel {
         _error.value = null
     }
 
-    fun showProgress() {
-        _showProgress.value = true
-    }
-
-    fun hideProgress() {
-        _showProgress.value = false
+    fun showProgress(isLoading: Boolean) {
+        _showProgress.value = isLoading
     }
 
     fun showError(message: String?) {

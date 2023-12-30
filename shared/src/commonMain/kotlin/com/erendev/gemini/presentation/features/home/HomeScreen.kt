@@ -1,8 +1,6 @@
 package com.erendev.gemini.presentation.features.home
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DismissibleNavigationDrawer
 import androidx.compose.material3.DrawerValue
@@ -12,8 +10,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import co.touchlab.kermit.Logger
 import com.bumble.appyx.components.backstack.operation.push
 import com.erendev.gemini.common.BaseScreen
 import com.erendev.gemini.common.resources.Icons
@@ -29,10 +30,11 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.component.get
+import org.koin.core.component.inject
 
 object HomeScreen : BaseScreen<HomeViewModel>() {
-    override val viewModel: HomeViewModel
-        get() = get()
+    override fun getViewModel(): Lazy<HomeViewModel> = inject()
+
 
     @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
     @Composable
@@ -40,6 +42,7 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
         val backStack = LocalBackStack.current
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val coroutineScope = rememberCoroutineScope()
+        val uiState by viewModel.uiState.collectAsState()
 
         DismissibleNavigationDrawer(
             drawerContent = {
@@ -69,7 +72,7 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
 
                                     },
                                     onDeleteClicked = {
-
+                                        viewModel.onDeleteClicked()
                                     }
                                 )
                             },
@@ -90,9 +93,11 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
                     }
                 ) {
                     Column(modifier = Modifier.padding(it)) {
-                        ChatMessages(listOf("asdasd", "asdasds", "asdasdasd"), modifier = Modifier.weight(1f))
+                        ChatMessages(uiState.messages, modifier = Modifier.weight(1f))
                         ChatMessageTextField { chatText ->
-                            viewModel.onSend(chatText)
+                            if (!chatText.isNullOrEmpty()) {
+                                viewModel.onSend(chatText)
+                            }
                         }
                     }
                 }

@@ -1,7 +1,7 @@
 import kotlin.Boolean;
 
 CREATE TABLE IF NOT EXISTS Chat(
-    chatId TEXT PRIMARY KEY NOT NULL,
+    chatId TEXT UNIQUE PRIMARY KEY NOT NULL,
     createdAt TEXT NOT NULL
 );
 
@@ -27,3 +27,20 @@ WHERE chatId = :chatId;
 insertMessage:
 INSERT INTO Message
 VALUES ?;
+
+insertChat:
+INSERT OR IGNORE INTO Chat
+VALUES ?;
+
+getChatById:
+SELECT *
+FROM Chat
+WHERE chatId = :chatId;
+
+deleteChatById:
+DELETE FROM Chat
+WHERE chatId = :chatId;
+
+deleteMessagesByChatId:
+DELETE FROM Message
+WHERE chatId = :chatId;

@@ -1,6 +1,7 @@
 package com.erendev.gemini.android
 
 import android.app.Application
+import com.erendev.gemini.data.network.initializeInterceptor
 import com.erendev.gemini.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -13,6 +14,7 @@ class MainApplication: Application() {
             androidContext(this@MainApplication)
             modules(appModule)
         }
+        initializeInterceptor()
     }
 
 }
