@@ -29,6 +29,7 @@ import com.bumble.appyx.navigation.integration.MainIntegrationPoint
 import com.bumble.appyx.navigation.integration.NodeFactory
 import com.bumble.appyx.navigation.integration.ScreenSize
 import com.bumble.appyx.navigation.integration.WebNodeHost
+import com.erendev.gemini.data.database.initializeWebWorker
 import com.erendev.gemini.presentation.features.home.HomeScreen
 import com.erendev.gemini.presentation.navigation.RootNode
 import com.erendev.gemini.presentation.theme.GeminiTheme
@@ -55,6 +56,7 @@ fun main() {
             }
             LaunchedEffect(Unit) {
                 initKoin()
+                initializeWebWorker()
                 isInitialized = true
             }
             val requester = remember { FocusRequester() }

@@ -1,6 +1,7 @@
 package com.erendev.gemini.data.repository
 
 import com.erendev.gemini.data.DataResult
+import com.erendev.gemini.data.database.AppDatabase
 import com.erendev.gemini.data.database.dao.ChatDao
 import com.erendev.gemini.data.entity.ChatModel
 import com.erendev.gemini.data.entity.GeminiContent
@@ -17,7 +18,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 class ChatRepositoryImpl(
-    private val chatDao: ChatDao,
     private val geminiAPIService: GeminiAPIService,
     private val appCoroutineDispatchers: AppCoroutineDispatchers
 ) : ChatRepository {
@@ -26,8 +26,8 @@ class ChatRepositoryImpl(
         chat: ChatModel,
         text: String,
         list: List<Message>
-    ) = flow {
-        chatDao.createChat(chat.toChat())
+    ) = flow<DataResult<List<Message>>> {
+        AppDatabase.chatDao.createChat(chat.toChat())
         val userMessage = Message(
             messageId = randomUUID(),
             chatId = chat.chatId,
@@ -54,8 +54,8 @@ class ChatRepositoryImpl(
                     isAiResponse = true,
                     timestamp = ""
                 )
-                chatDao.sendMessage(userMessage)
-                chatDao.sendMessage(modelMessage)
+                AppDatabase.chatDao.sendMessage(userMessage)
+                AppDatabase.chatDao.sendMessage(modelMessage)
                 emit(DataResult.Success(newList + modelMessage))
             }
         }
@@ -64,7 +64,7 @@ class ChatRepositoryImpl(
 
     override suspend fun getMessages(chat: ChatModel): DataResult<List<Message>> {
         return try {
-            val messages = chatDao.getMessages(chat.chatId)
+            val messages = AppDatabase.chatDao.getMessages(chat.chatId)
             DataResult.Success(messages)
         }catch (e: Exception) {
             DataResult.Error(e.message)
@@ -73,7 +73,7 @@ class ChatRepositoryImpl(
 
     override suspend fun getChat(chatId: String): DataResult<ChatModel?> {
         return try {
-            val chat = chatDao.getChat(chatId)
+            val chat = AppDatabase.chatDao.getChat(chatId)
             DataResult.Success(chat?.toChatModel())
         }catch (e: Exception) {
             DataResult.Error(e.message)
@@ -82,7 +82,7 @@ class ChatRepositoryImpl(
 
     override suspend fun deleteChat(chat: ChatModel): DataResult<Unit> {
         return try {
-            chatDao.deleteChat(chat)
+            AppDatabase.chatDao.deleteChat(chat)
             DataResult.Success(Unit)
         }catch (e: Exception) {
             DataResult.Error(e.message)
@@ -91,7 +91,7 @@ class ChatRepositoryImpl(
 
     override suspend fun getRecent(page: Int): DataResult<List<ChatModel>> {
         return try {
-            val recent = chatDao.getRecentChats(offset = (page * 10).toLong())
+            val recent = AppDatabase.chatDao.getRecentChats(offset = (page * 10).toLong())
             DataResult.Success(recent.map { it.toChatModel() })
         }catch (e: Exception) {
             DataResult.Error(e.message)

@@ -1,5 +1,6 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import org.jetbrains.compose.internal.de.undercouch.gradle.tasks.download.Download
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -68,6 +69,7 @@ kotlin {
 
             //Koin
             implementation(libs.koin.core)
+            implementation(libs.koin.core.coroutine)
 
             implementation(libs.appyx.navigation)
             implementation(libs.appyx.interactions)
@@ -111,6 +113,9 @@ kotlin {
             implementation(devNpm("copy-webpack-plugin", "9.1.0"))
             implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.0.0"))
             implementation(npm("sql.js", "1.8.0"))
+        }
+        jsMain {
+            resources.srcDir(layout.buildDirectory.dir("sqlite"))
         }
     }
 
@@ -166,4 +171,31 @@ buildkonfig {
         buildConfigField(STRING, "BASE_URL", "https://generativelanguage.googleapis.com/")
         buildConfigField(STRING, "API_KEY", gradleLocalProperties(rootDir).getProperty("API_KEY"))
     }
+}
+
+// See https://sqlite.org/download.html for the latest wasm build version
+val sqlite = 3400000
+
+val sqliteDownload = tasks.register("sqliteDownload", Download::class.java) {
+    src("https://sqlite.org/2022/sqlite-wasm-$sqlite.zip")
+    dest(layout.buildDirectory.dir("tmp"))
+    onlyIfModified(true)
+}
+
+val sqliteUnzip = tasks.register("sqliteUnzip", Copy::class.java) {
+    dependsOn(sqliteDownload)
+    from(zipTree(layout.buildDirectory.dir("tmp/sqlite-wasm-$sqlite.zip"))) {
+        include("sqlite-wasm-$sqlite/jswasm/**")
+        exclude("**/*worker1*")
+
+        eachFile {
+            relativePath = RelativePath(true, *relativePath.segments.drop(2).toTypedArray())
+        }
+    }
+    into(layout.buildDirectory.dir("sqlite"))
+    includeEmptyDirs = false
+}
+
+tasks.named("jsProcessResources").configure {
+    dependsOn(sqliteUnzip)
 }
