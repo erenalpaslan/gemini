@@ -9,7 +9,7 @@ import org.w3c.dom.Worker
 actual fun Scope.sqlDriverFactory(): SqlDriver {
     return WebWorkerDriver(
         Worker(
-            js("""new URL("@cashapp/sqldelight-sqljs-worker/sqljs.worker.js", import.meta.url)""") as String
+            js("""new URL("@cashapp/sqldelight-sqljs-worker/sqljs.worker.js", import.meta.url)""")
         )
     )
 }

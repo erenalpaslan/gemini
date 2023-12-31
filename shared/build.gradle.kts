@@ -107,11 +107,10 @@ kotlin {
         jsMain.dependencies {
             implementation(libs.ktor.client.js)
             implementation(libs.web.worker.driver)
+            implementation("app.cash.sqldelight:web-worker-driver:2.0.0")
             implementation(devNpm("copy-webpack-plugin", "9.1.0"))
-            implementation(npm("dateformat", "3.0.3"))
             implementation(npm("@cashapp/sqldelight-sqljs-worker", "2.0.0"))
             implementation(npm("sql.js", "1.8.0"))
-            implementation(npm("uuid", "9.0.1"))
         }
     }
 
