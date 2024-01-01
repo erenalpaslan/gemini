@@ -1,5 +1,7 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import kotlinx.coroutines.channels.Channel
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.compose.internal.de.undercouch.gradle.tasks.download.Download
 
 plugins {
@@ -38,7 +40,14 @@ kotlin {
         }
     }
 
+    jvm("desktop") {
+        compilations.all {
+            kotlinOptions.jvmTarget = libs.versions.jvmTarget.get()
+        }
+    }
+
     sourceSets {
+        val desktopMain by getting
         commonMain.dependencies {
             api(compose.runtime)
             implementation(compose.foundation)
@@ -116,6 +125,13 @@ kotlin {
         }
         jsMain {
             resources.srcDir(layout.buildDirectory.dir("sqlite"))
+        }
+        desktopMain.dependencies {
+            implementation(libs.ktor.client.java)
+            implementation(libs.sqlite.driver)
+            implementation(compose.desktop.currentOs)
+            implementation(compose.desktop.common)
+            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 
@@ -198,4 +214,31 @@ val sqliteUnzip = tasks.register("sqliteUnzip", Copy::class.java) {
 
 tasks.named("jsProcessResources").configure {
     dependsOn(sqliteUnzip)
+}
+
+compose.desktop {
+    application {
+        mainClass = "com.erendev.gemini.MainKt"
+
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "com.erendev.gemini"
+            packageVersion = "1.0.0"
+
+            val iconsRoot = project.file("../shared/src/commonMain/resources")
+            macOS {
+                iconFile.set(iconsRoot.resolve("icon-mac.icns"))
+                dockName = "Gemini"
+            }
+            windows {
+                iconFile.set(iconsRoot.resolve("icon-windows.ico"))
+                menuGroup = "Gemini"
+                // see https://wixtoolset.org/documentation/manual/v3/howtos/general/generate_guids.html
+                upgradeUuid = "18159995-d967-4CD2-8885-77BFA97CFA9F"
+            }
+            linux {
+                iconFile.set(iconsRoot.resolve("icon-linux.png"))
+            }
+        }
+    }
 }
