@@ -1,4 +1,4 @@
-# Reporting Security Issues
+# Reporting Security Issues 
 Gemini Chat community take security bugs in Gemini Chat Project seriously. We appreciate your efforts to responsibly disclose your findings, and will make every effort to acknowledge your contributions.
 
 To report a security issue, please use the GitHub Security Advisory "Report a Vulnerability" tab.
