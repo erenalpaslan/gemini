@@ -18,12 +18,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +43,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bumble.appyx.interactions.core.ui.property.impl.Width
+import com.erendev.gemini.common.resources.Drawables
 import com.erendev.gemini.common.resources.Icons
 import com.erendev.gemini.presentation.theme.black
 import com.erendev.gemini.presentation.theme.green_light
@@ -58,12 +61,13 @@ import org.jetbrains.compose.resources.painterResource
 fun ChatMessages(
     messages: List<Message> = emptyList(),
     modifier: Modifier = Modifier,
+    lazyListState: LazyListState,
     onAnswering: Boolean = false
 ) {
     Column(modifier = modifier) {
         when {
             messages.isEmpty() -> EmptyMessages()
-            else -> MessageList(messages, onAnswering)
+            else -> MessageList(messages, lazyListState, onAnswering)
         }
     }
 }
@@ -76,19 +80,19 @@ fun EmptyMessages() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(painterResource(Icons.Trash), null)
+        Image(painterResource(Drawables.AppLogo), null, modifier = Modifier.fillMaxWidth(0.2f))
     }
 }
 
 @Composable
 fun MessageList(
     messages: List<Message>,
+    lazyListState: LazyListState,
     onAnswering: Boolean = false
 ) {
     var visible by remember {
         mutableStateOf(false)
     }
-    val lazyListState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
         lazyListState.animateScrollToItem(messages.lastIndex)

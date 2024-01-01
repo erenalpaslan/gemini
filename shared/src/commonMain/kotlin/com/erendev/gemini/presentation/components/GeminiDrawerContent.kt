@@ -14,10 +14,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.erendev.gemini.common.resources.Icons
@@ -28,7 +32,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-@OptIn(ExperimentalResourceApi::class)
+@OptIn(ExperimentalResourceApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun GeminiDrawerSheet(
     recent: List<ChatModel> = emptyList(),
@@ -36,13 +40,21 @@ fun GeminiDrawerSheet(
     onNewChatClicked: () -> Unit,
     onChatClicked: (ChatModel) -> Unit,
     onSearch: (String?) -> Unit,
-    onDrawerOpen: () -> Unit
+    onDrawerOpen: () -> Unit = {},
+    onDrawerClosed: () -> Unit = {}
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(drawerState.isOpen) {
+    LaunchedEffect(drawerState.isOpen, drawerState.isClosed) {
         if (drawerState.isOpen) {
+            keyboardController?.hide()
             onDrawerOpen()
+        }
+
+        if (drawerState.isClosed) {
+            keyboardController?.hide()
+            onDrawerClosed()
         }
     }
 
@@ -67,7 +79,7 @@ fun GeminiDrawerSheet(
             item {
                 NavigationDrawerItem(
                     label = {
-                        Text("New Chat")
+                        Text(Strings.Button.NewChat)
                     },
                     selected = false,
                     onClick = {
@@ -75,6 +87,7 @@ fun GeminiDrawerSheet(
                             drawerState.close()
                         }
                         onNewChatClicked()
+                        keyboardController?.hide()
                     },
                     icon = {
                         Icon(painterResource(Icons.MessageEdit), null)
@@ -85,7 +98,7 @@ fun GeminiDrawerSheet(
             items(recent) {
                 NavigationDrawerItem(
                     label = {
-                        Text(it.chatId, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text(it.title, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     },
                     selected = false,
                     onClick = {
@@ -93,6 +106,7 @@ fun GeminiDrawerSheet(
                             drawerState.close()
                         }
                         onChatClicked(it)
+                        keyboardController?.hide()
                     },
                     modifier = Modifier.padding(0.dp),
                 )

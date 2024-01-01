@@ -12,6 +12,7 @@ object Strings {
         const val Delete = "Delete"
         const val Rename = "Rename"
         const val ViewDetails = "View Details"
+        const val NewChat = "New Chat"
     }
 
     object Onboarding {
