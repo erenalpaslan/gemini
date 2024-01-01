@@ -38,6 +38,7 @@ ktor-client-okhttp = {module = "io.ktor:ktor-client-android", version.ref = "kto
 ktor-client-darwin = {module = "io.ktor:ktor-client-darwin", version.ref = "ktor"}
 koin-core = {group = "io.insert-koin", name = "koin-core", version.ref="koin"}
 koin-android = {group = "io.insert-koin", name = "koin-android", version.ref="koin"}
+koin-core-coroutine = {module = "io.insert-koin:koin-core-coroutines", version.ref="koin"}
 kermit = {module = "co.touchlab:kermit", version.ref = "kermit"}
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 multiplatform-settings = {module = "com.russhwolf:multiplatform-settings", version.ref="settings"}

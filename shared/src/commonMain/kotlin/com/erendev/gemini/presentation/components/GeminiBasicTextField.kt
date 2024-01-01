@@ -62,6 +62,6 @@ fun GeminiBasicTextField(
             unfocusedIndicatorColor = Color.Transparent,
             containerColor = ink_dark
         ),
-        shape = CircleShape
+        shape = CircleShape,
     )
 }

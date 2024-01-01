@@ -10,10 +10,15 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import co.touchlab.kermit.Logger
 import com.bumble.appyx.components.backstack.operation.push
 import com.erendev.gemini.common.BaseScreen
@@ -36,24 +41,39 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
     override fun getViewModel(): Lazy<HomeViewModel> = inject()
 
 
-    @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class,
+        ExperimentalComposeUiApi::class
+    )
     @Composable
     override fun Screen() {
         val backStack = LocalBackStack.current
-        val drawerState = rememberDrawerState(DrawerValue.Closed)
-        val coroutineScope = rememberCoroutineScope()
         val uiState by viewModel.uiState.collectAsState()
+        val coroutineScope = rememberCoroutineScope()
+        val drawerState = rememberDrawerState(DrawerValue.Closed)
+        val chatText = remember {
+            mutableStateOf<String?>(null)
+        }
+        val keyboardController = LocalSoftwareKeyboardController.current
 
         DismissibleNavigationDrawer(
             drawerContent = {
                 GeminiDrawerSheet(
+                    recent = uiState.recent,
+                    drawerState = drawerState,
                     onNewChatClicked = {
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
+                        keyboardController?.hide()
+                        viewModel.newChatClicked()
                     },
-                    onSearch = { searchText ->
+                    onChatClicked = { chatModel ->
+                        keyboardController?.hide()
+                        viewModel.onChatClicked(chatModel)
+                    },
+                    onSearch = { _ ->
                         //TODO: Search on recents
+                    },
+                    onDrawerOpen = {
+                        keyboardController?.hide()
+                        viewModel.getRecent()
                     }
                 )
             },
@@ -66,18 +86,21 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
                             actions = {
                                 ChatMoreMenu(
                                     onViewDetailClicked = {
+                                        keyboardController?.hide()
                                         backStack.push(NavTarget.ViewDetail)
                                     },
                                     onRenameClicked = {
 
                                     },
                                     onDeleteClicked = {
+                                        keyboardController?.hide()
                                         viewModel.onDeleteClicked()
                                     }
                                 )
                             },
                             navigationIcon = {
                                 IconButton(onClick = {
+                                    keyboardController?.hide()
                                     coroutineScope.launch {
                                         if (drawerState.isOpen) {
                                             drawerState.close()
@@ -93,10 +116,19 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
                     }
                 ) {
                     Column(modifier = Modifier.padding(it)) {
-                        ChatMessages(uiState.messages, modifier = Modifier.weight(1f))
-                        ChatMessageTextField { chatText ->
-                            if (!chatText.isNullOrEmpty()) {
-                                viewModel.onSend(chatText)
+                        ChatMessages(
+                            messages = uiState.messages,
+                            modifier = Modifier.weight(1f),
+                            onAnswering = uiState.onAnswering ?: false
+                        )
+                        ChatMessageTextField(
+                            chatText = chatText,
+                            onAnswering = uiState.onAnswering ?: false
+                        ) { sendText ->
+                            if (!sendText.isNullOrEmpty()) {
+                                keyboardController?.hide()
+                                viewModel.onSend(sendText)
+                                chatText.value = ""
                             }
                         }
                     }

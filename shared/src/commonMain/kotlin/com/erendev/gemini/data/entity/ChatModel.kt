@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ChatModel(
     val chatId: String,
-    val createdAt: String,
+    val createdAt: String
 )
 
 fun Chat.toChatModel() = ChatModel(

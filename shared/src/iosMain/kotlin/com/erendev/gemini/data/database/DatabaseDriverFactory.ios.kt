@@ -7,7 +7,7 @@ import co.touchlab.sqliter.DatabaseConfiguration
 import com.erendev.gemini.AppDb
 import org.koin.core.scope.Scope
 
-actual fun Scope.sqlDriverFactory(): SqlDriver {
+actual fun sqlDriverFactory(): SqlDriver? {
     return NativeSqliteDriver(
         schema = AppDb.Schema.synchronous(),
         name = "${DatabaseConstants.name}.db",

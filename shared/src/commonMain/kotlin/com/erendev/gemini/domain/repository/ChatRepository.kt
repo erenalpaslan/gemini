@@ -26,4 +26,6 @@ interface ChatRepository {
         chat: ChatModel
     ): DataResult<Unit>
 
+    suspend fun getRecent(page: Int): DataResult<List<ChatModel>>
+
 }
