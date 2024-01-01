@@ -2,7 +2,8 @@ import kotlin.Boolean;
 
 CREATE TABLE IF NOT EXISTS Chat(
     chatId TEXT UNIQUE PRIMARY KEY NOT NULL,
-    createdAt TEXT NOT NULL
+    createdAt TEXT NOT NULL,
+    title TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Message(
@@ -18,6 +19,10 @@ getRecentPages:
 SELECT *
 FROM Chat
 LIMIT :limit OFFSET :offset;
+
+getAllRecentPages:
+SELECT *
+FROM Chat;
 
 getMessages:
 SELECT *

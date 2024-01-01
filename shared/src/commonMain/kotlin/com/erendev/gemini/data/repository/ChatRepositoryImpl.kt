@@ -10,6 +10,7 @@ import com.erendev.gemini.data.entity.toChat
 import com.erendev.gemini.data.entity.toChatModel
 import com.erendev.gemini.data.network.services.GeminiAPIService
 import com.erendev.gemini.domain.repository.ChatRepository
+import com.erendev.gemini.utils.date.DateUtils
 import com.erendev.gemini.utils.dispatchers.AppCoroutineDispatchers
 import com.erendev.gemini.utils.randomUUID
 import comerendevgemini.Chat
@@ -26,14 +27,15 @@ class ChatRepositoryImpl(
         chat: ChatModel,
         text: String,
         list: List<Message>
-    ) = flow<DataResult<List<Message>>> {
+    ) = flow {
+        chat.title = text
         AppDatabase.chatDao.createChat(chat.toChat())
         val userMessage = Message(
             messageId = randomUUID(),
             chatId = chat.chatId,
             content = text,
             isAiResponse = false,
-            timestamp = ""
+            timestamp = DateUtils.now()
         )
         val newList = list + userMessage
         emit(DataResult.Success(newList))
@@ -92,6 +94,15 @@ class ChatRepositoryImpl(
     override suspend fun getRecent(page: Int): DataResult<List<ChatModel>> {
         return try {
             val recent = AppDatabase.chatDao.getRecentChats(offset = (page * 10).toLong())
+            DataResult.Success(recent.map { it.toChatModel() })
+        }catch (e: Exception) {
+            DataResult.Error(e.message)
+        }
+    }
+
+    override suspend fun getAllRecent(): DataResult<List<ChatModel>> {
+        return try {
+            val recent = AppDatabase.chatDao.getAllRecent()
             DataResult.Success(recent.map { it.toChatModel() })
         }catch (e: Exception) {
             DataResult.Error(e.message)

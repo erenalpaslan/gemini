@@ -75,4 +75,10 @@ class ChatDao(
             AppDatabase.appDb?.appDatabaseQueries?.deleteChatById(chatModel.chatId)
         }
     }
+
+    suspend fun getAllRecent(): List<Chat> {
+        return withContext(dispatchers.io) {
+            AppDatabase.appDb?.appDatabaseQueries?.getAllRecentPages()?.awaitAsList() ?: emptyList()
+        }
+    }
 }

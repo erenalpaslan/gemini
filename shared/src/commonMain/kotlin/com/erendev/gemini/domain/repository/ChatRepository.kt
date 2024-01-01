@@ -28,4 +28,6 @@ interface ChatRepository {
 
     suspend fun getRecent(page: Int): DataResult<List<ChatModel>>
 
+    suspend fun getAllRecent(): DataResult<List<ChatModel>>
+
 }

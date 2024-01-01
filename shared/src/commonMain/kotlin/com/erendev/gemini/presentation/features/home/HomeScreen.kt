@@ -2,6 +2,7 @@ package com.erendev.gemini.presentation.features.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.DismissibleNavigationDrawer
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -54,26 +55,27 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
             mutableStateOf<String?>(null)
         }
         val keyboardController = LocalSoftwareKeyboardController.current
+        val recent by viewModel.recent.collectAsState()
+        val lazyListState = rememberLazyListState()
 
         DismissibleNavigationDrawer(
             drawerContent = {
                 GeminiDrawerSheet(
-                    recent = uiState.recent,
+                    recent = recent,
                     drawerState = drawerState,
                     onNewChatClicked = {
-                        keyboardController?.hide()
                         viewModel.newChatClicked()
                     },
                     onChatClicked = { chatModel ->
-                        keyboardController?.hide()
                         viewModel.onChatClicked(chatModel)
                     },
-                    onSearch = { _ ->
-                        //TODO: Search on recents
+                    onSearch = { searchText ->
+                        viewModel.searchRecent(searchText)
                     },
                     onDrawerOpen = {
-                        keyboardController?.hide()
                         viewModel.getRecent()
+                    },
+                    onDrawerClosed = {
                     }
                 )
             },
@@ -119,6 +121,7 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
                         ChatMessages(
                             messages = uiState.messages,
                             modifier = Modifier.weight(1f),
+                            lazyListState = lazyListState,
                             onAnswering = uiState.onAnswering ?: false
                         )
                         ChatMessageTextField(
