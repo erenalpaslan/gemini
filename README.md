@@ -1,9 +1,10 @@
 # KMP - Chat Application Powered by Gemini
 <img src="readme_images/gemini_logo.png" alt="fusion banner" style="border-radius:5%;" />
 
+>Gemini chat application that seamlessly runs on Android, iOS, desktop, and web platforms. It leverages Kotlin Multiplatform to share code and functionality across these environments, ensuring a consistent user experience. The application is powered by Gemini.
+
 ![kotlin-version](https://img.shields.io/badge/kotlin-1.9.21-green)
 
->
 
 **Kotlin Multiplatform** project with Compose multiplatform clients along with Ktor. Currently running on
 - Android
