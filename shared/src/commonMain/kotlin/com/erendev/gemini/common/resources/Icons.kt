@@ -14,4 +14,5 @@ object Icons {
     const val InfoCircle = "ic_info_circle.xml"
     const val Trash = "ic_trash.xml"
     const val MessageEdit = "ic_message_edit.xml"
+    const val Send = "ic_send.xml"
 }
