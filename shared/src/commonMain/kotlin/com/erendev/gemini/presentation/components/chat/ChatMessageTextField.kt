@@ -69,7 +69,8 @@ fun ChatMessageTextField(
             },
             colors = IconButtonDefaults.filledIconButtonColors(
                 containerColor = MaterialTheme.colorScheme.onPrimaryContainer
-            )
+            ),
+            enabled = !onAnswering
         ) {
             if (onAnswering) {
                 CircularProgressIndicator(modifier = Modifier.padding(8.dp))
