@@ -28,7 +28,7 @@ object Strings {
     }
 
     object Welcome {
-        const val WELCOME_TITLE = "Welcome to\nChatGemini"
+        const val WELCOME_TITLE = "Welcome to\nGeminiChat"
         const val WELCOME_DESC = "This app uses Gemini AI, syncs your history in your device and brings latest improvements from Gemini"
         const val TITLE_ONE = "The Gemini era: enabling a future of innovation"
         const val DESC_ONE = "This is a significant milestone in the development of AI, and the start of a new era for us at Google as we continue to rapidly innovate and responsibly advance the capabilities of our models."
