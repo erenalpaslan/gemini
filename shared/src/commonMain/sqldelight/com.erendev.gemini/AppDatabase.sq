@@ -49,3 +49,8 @@ WHERE chatId = :chatId;
 deleteMessagesByChatId:
 DELETE FROM Message
 WHERE chatId = :chatId;
+
+updateChatName:
+UPDATE Chat
+SET title = :title
+WHERE chatId = :chatId;

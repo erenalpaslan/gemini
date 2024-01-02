@@ -6,6 +6,7 @@ package com.erendev.gemini.common.resources
 object Strings {
 
     const val APP_NAME = "Gemini"
+    const val ChatTitle = "Chat"
 
     object Button {
         const val Continue = "Continue"
@@ -13,6 +14,7 @@ object Strings {
         const val Rename = "Rename"
         const val ViewDetails = "View Details"
         const val NewChat = "New Chat"
+        const val Save = "Save"
     }
 
     object Onboarding {
@@ -36,8 +38,16 @@ object Strings {
         const val DESC_THIRD = "Building upon Google’s AI Principles and the robust safety policies across google's products, new protections to account for Gemini’s multimodal capabilities"
     }
 
+    object ViewDetail {
+        const val ModelInfo = "Model Info"
+        const val DefaultAiModel = "Default (Gemini-Pro)"
+        const val ModelDescription = "Best model for scaling across a wide range of tasks."
+    }
+
     object Chat {
         const val Message = "Message"
         const val Search = "Search"
+        const val Title = "Title"
+        const val RenameChat = "Rename Chat"
     }
 }

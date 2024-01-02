@@ -7,6 +7,7 @@ import com.erendev.gemini.domain.usecase.DeleteChatUseCase
 import com.erendev.gemini.domain.usecase.GetAllRecentUseCase
 import com.erendev.gemini.domain.usecase.GetMessagesUseCase
 import com.erendev.gemini.domain.usecase.GetRecentUseCase
+import com.erendev.gemini.domain.usecase.RenameUseCase
 import com.erendev.gemini.domain.usecase.SendMessageUseCase
 import com.erendev.gemini.utils.date.DateUtils
 import com.erendev.gemini.utils.randomUUID
@@ -30,7 +31,8 @@ class HomeViewModel(
     private val sendMessageUseCase: SendMessageUseCase,
     private val getMessagesUseCase: GetMessagesUseCase,
     private val deleteChatUseCase: DeleteChatUseCase,
-    private val getAllRecentUseCase: GetAllRecentUseCase
+    private val getAllRecentUseCase: GetAllRecentUseCase,
+    private val renameUseCase: RenameUseCase
 ) : BaseViewModel() {
 
     private lateinit var chat: ChatModel
@@ -150,5 +152,24 @@ class HomeViewModel(
             this@HomeViewModel.searchText.emit(searchText)
         }
     }
+
+    fun renameChat(title: String) {
+        viewModelScope.launch {
+            renameUseCase(RenameUseCase.Param(
+                chat = chat,
+                title = title
+            )).collect { result ->
+                when(result) {
+                    is GeminiResult.Loading -> showProgress(result.isLoading)
+                    is GeminiResult.Success -> {
+                        chat.title = title
+                    }
+                    is GeminiResult.Error -> {}
+                }
+            }
+        }
+    }
+
+    fun getChat() = chat
 
 }

@@ -81,4 +81,13 @@ class ChatDao(
             AppDatabase.appDb?.appDatabaseQueries?.getAllRecentPages()?.awaitAsList() ?: emptyList()
         }
     }
+
+    suspend fun rename(chatId: String, newTitle: String) {
+        withContext(dispatchers.io) {
+            AppDatabase.appDb?.appDatabaseQueries?.updateChatName(
+                chatId = chatId,
+                title = newTitle
+            )
+        }
+    }
 }
