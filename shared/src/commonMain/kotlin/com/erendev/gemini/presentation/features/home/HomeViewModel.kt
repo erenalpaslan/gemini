@@ -15,6 +15,7 @@ import com.erendev.gemini.utils.settings.settings
 import comerendevgemini.Chat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,7 +38,7 @@ class HomeViewModel(
     val uiState = _uiState.asStateFlow()
 
     private var allRecent: List<ChatModel> = emptyList()
-    private var searchText: MutableStateFlow<String?> = MutableStateFlow(null)
+    private var searchText: MutableSharedFlow<String?> = MutableSharedFlow()
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val recent = searchText.mapLatest { searchText ->
         if (!searchText.isNullOrEmpty()) {
@@ -128,7 +129,7 @@ class HomeViewModel(
                     is GeminiResult.Loading -> showProgress(result.isLoading)
                     is GeminiResult.Success -> {
                         allRecent = result.data
-                        searchText.update { "" }
+                        searchText.emit("")
                     }
                     is GeminiResult.Error -> {}
                 }
@@ -146,7 +147,7 @@ class HomeViewModel(
 
     fun searchRecent(searchText: String?) {
         viewModelScope.launch {
-            this@HomeViewModel.searchText.update { searchText }
+            this@HomeViewModel.searchText.emit(searchText)
         }
     }
 
