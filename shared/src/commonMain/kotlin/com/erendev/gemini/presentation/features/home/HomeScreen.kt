@@ -1,14 +1,21 @@
 package com.erendev.gemini.presentation.features.home
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.DismissibleNavigationDrawer
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,9 +24,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.TextFieldValue
 import co.touchlab.kermit.Logger
 import com.bumble.appyx.components.backstack.operation.push
 import com.erendev.gemini.common.BaseScreen
@@ -42,7 +51,8 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
     override fun getViewModel(): Lazy<HomeViewModel> = inject()
 
 
-    @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class,
+    @OptIn(
+        ExperimentalResourceApi::class, ExperimentalMaterial3Api::class,
         ExperimentalComposeUiApi::class
     )
     @Composable
@@ -57,6 +67,17 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
         val keyboardController = LocalSoftwareKeyboardController.current
         val recent by viewModel.recent.collectAsState()
         val lazyListState = rememberLazyListState()
+        var showRenameDialog by remember {
+            mutableStateOf(false)
+        }
+        var renameField by remember {
+            mutableStateOf("")
+        }
+        LaunchedEffect(showRenameDialog) {
+            if (showRenameDialog) {
+                renameField = viewModel.getChat().title
+            }
+        }
 
         DismissibleNavigationDrawer(
             drawerContent = {
@@ -92,7 +113,7 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
                                         backStack.push(NavTarget.ViewDetail)
                                     },
                                     onRenameClicked = {
-
+                                        showRenameDialog = true
                                     },
                                     onDeleteClicked = {
                                         keyboardController?.hide()
@@ -138,5 +159,39 @@ object HomeScreen : BaseScreen<HomeViewModel>() {
                 }
             }
         )
+
+        if (showRenameDialog) {
+            AlertDialog(
+                onDismissRequest = {
+                    showRenameDialog = false
+                },
+                confirmButton = {
+                    Button(onClick = {
+                        if (renameField.isNotEmpty()) {
+                            viewModel.renameChat(renameField)
+                            showRenameDialog = false
+                        }
+                    }) {
+                        Text(Strings.Button.Save)
+                    }
+                },
+                text = {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        OutlinedTextField(
+                            value = renameField,
+                            onValueChange = {
+                                renameField = it
+                            },
+                            placeholder = {
+                                Text(Strings.Chat.Title)
+                            }
+                        )
+                    }
+                },
+                title = {
+                    Text(Strings.Chat.RenameChat)
+                }
+            )
+        }
     }
 }

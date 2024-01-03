@@ -9,4 +9,5 @@ val useCaseModule = module {
     factoryOf(::DeleteChatUseCase)
     factoryOf(::GetRecentUseCase)
     factoryOf(::GetAllRecentUseCase)
+    factoryOf(::RenameUseCase)
 }

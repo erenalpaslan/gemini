@@ -30,4 +30,6 @@ interface ChatRepository {
 
     suspend fun getAllRecent(): DataResult<List<ChatModel>>
 
+    suspend fun rename(chat: ChatModel, title: String): DataResult<Unit>
+
 }

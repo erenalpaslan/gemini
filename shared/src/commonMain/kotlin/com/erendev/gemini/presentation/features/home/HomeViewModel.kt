@@ -7,6 +7,7 @@ import com.erendev.gemini.domain.usecase.DeleteChatUseCase
 import com.erendev.gemini.domain.usecase.GetAllRecentUseCase
 import com.erendev.gemini.domain.usecase.GetMessagesUseCase
 import com.erendev.gemini.domain.usecase.GetRecentUseCase
+import com.erendev.gemini.domain.usecase.RenameUseCase
 import com.erendev.gemini.domain.usecase.SendMessageUseCase
 import com.erendev.gemini.utils.date.DateUtils
 import com.erendev.gemini.utils.randomUUID
@@ -15,6 +16,7 @@ import com.erendev.gemini.utils.settings.settings
 import comerendevgemini.Chat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,7 +31,8 @@ class HomeViewModel(
     private val sendMessageUseCase: SendMessageUseCase,
     private val getMessagesUseCase: GetMessagesUseCase,
     private val deleteChatUseCase: DeleteChatUseCase,
-    private val getAllRecentUseCase: GetAllRecentUseCase
+    private val getAllRecentUseCase: GetAllRecentUseCase,
+    private val renameUseCase: RenameUseCase
 ) : BaseViewModel() {
 
     private lateinit var chat: ChatModel
@@ -37,7 +40,7 @@ class HomeViewModel(
     val uiState = _uiState.asStateFlow()
 
     private var allRecent: List<ChatModel> = emptyList()
-    private var searchText: MutableStateFlow<String?> = MutableStateFlow(null)
+    private var searchText: MutableSharedFlow<String?> = MutableSharedFlow()
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val recent = searchText.mapLatest { searchText ->
         if (!searchText.isNullOrEmpty()) {
@@ -128,7 +131,7 @@ class HomeViewModel(
                     is GeminiResult.Loading -> showProgress(result.isLoading)
                     is GeminiResult.Success -> {
                         allRecent = result.data
-                        searchText.update { "" }
+                        searchText.emit("")
                     }
                     is GeminiResult.Error -> {}
                 }
@@ -146,8 +149,27 @@ class HomeViewModel(
 
     fun searchRecent(searchText: String?) {
         viewModelScope.launch {
-            this@HomeViewModel.searchText.update { searchText }
+            this@HomeViewModel.searchText.emit(searchText)
         }
     }
+
+    fun renameChat(title: String) {
+        viewModelScope.launch {
+            renameUseCase(RenameUseCase.Param(
+                chat = chat,
+                title = title
+            )).collect { result ->
+                when(result) {
+                    is GeminiResult.Loading -> showProgress(result.isLoading)
+                    is GeminiResult.Success -> {
+                        chat.title = title
+                    }
+                    is GeminiResult.Error -> {}
+                }
+            }
+        }
+    }
+
+    fun getChat() = chat
 
 }

@@ -109,4 +109,13 @@ class ChatRepositoryImpl(
         }
     }
 
+    override suspend fun rename(chat: ChatModel, title: String): DataResult<Unit> {
+        return try {
+            AppDatabase.chatDao.rename(chat.chatId, title)
+            DataResult.Success(Unit)
+        } catch (e: Exception) {
+            DataResult.Error(e.message)
+        }
+    }
+
 }

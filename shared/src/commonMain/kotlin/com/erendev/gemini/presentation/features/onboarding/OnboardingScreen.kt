@@ -51,7 +51,7 @@ class OnboardingScreen : BaseScreen<OnboardingViewModel>() {
                     .padding(24.dp)
             ) {
                 Text("Get Start")
-                Text("ChatGemini is a KMP project that available on Mobile, Web and Desktop platforms")
+                Text("GeminiChat is a KMP project that available on Mobile, Web and Desktop platforms")
                 Button(
                     onClick = {
                         backStack.replace(NavTarget.Welcome)
